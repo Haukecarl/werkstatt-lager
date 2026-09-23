@@ -1,4 +1,4 @@
-const CACHE_NAME = "werkstatt-lager-v1";
+const CACHE_NAME = "werkstatt-lager-v2";
 
 const APP_FILES = [
     "./",
@@ -21,11 +21,9 @@ self.addEventListener(
             caches
                 .open(CACHE_NAME)
                 .then(cache => {
-
                     return cache.addAll(
                         APP_FILES
                     );
-
                 })
         );
 
@@ -67,10 +65,11 @@ self.addEventListener(
                     );
 
                 })
+                .then(() => {
+                    return self.clients.claim();
+                })
 
         );
-
-        self.clients.claim();
 
     }
 );
@@ -78,6 +77,13 @@ self.addEventListener(
 
 // --------------------------------------------------
 // DATEIEN LADEN
+//
+// Strategie:
+// 1. Wenn Internet vorhanden:
+//    aktuelle Datei vom Server laden
+// 2. Neue Datei im Cache speichern
+// 3. Wenn kein Internet vorhanden:
+//    Datei aus dem Cache laden
 // --------------------------------------------------
 
 self.addEventListener(
@@ -91,67 +97,91 @@ self.addEventListener(
         }
 
 
+        const requestUrl =
+            new URL(
+                event.request.url
+            );
+
+
+        // Nur Dateien unserer eigenen App behandeln
+        if (
+            requestUrl.origin !==
+            self.location.origin
+        ) {
+            return;
+        }
+
+
         event.respondWith(
 
-            caches
-                .match(event.request)
-                .then(cachedResponse => {
+            fetch(
+                event.request
+            )
+                .then(networkResponse => {
 
-                    if (cachedResponse) {
+                    if (
+                        networkResponse &&
+                        networkResponse.status === 200
+                    ) {
+
+                        const responseCopy =
+                            networkResponse.clone();
+
+
+                        caches
+                            .open(CACHE_NAME)
+                            .then(cache => {
+
+                                cache.put(
+                                    event.request,
+                                    responseCopy
+                                );
+
+                            });
+
+                    }
+
+
+                    return networkResponse;
+
+                })
+                .catch(async () => {
+
+                    const cachedResponse =
+                        await caches.match(
+                            event.request
+                        );
+
+
+                    if (
+                        cachedResponse
+                    ) {
 
                         return cachedResponse;
 
                     }
 
 
-                    return fetch(
-                        event.request
-                    )
-                        .then(networkResponse => {
+                    if (
+                        event.request.mode ===
+                        "navigate"
+                    ) {
 
-                            if (
-                                !networkResponse ||
-                                networkResponse.status !== 200
-                            ) {
+                        return caches.match(
+                            "./index.html"
+                        );
 
-                                return networkResponse;
-
-                            }
+                    }
 
 
-                            const responseCopy =
-                                networkResponse.clone();
-
-
-                            caches
-                                .open(CACHE_NAME)
-                                .then(cache => {
-
-                                    cache.put(
-                                        event.request,
-                                        responseCopy
-                                    );
-
-                                });
-
-
-                            return networkResponse;
-
-                        })
-                        .catch(() => {
-
-                            if (
-                                event.request.mode ===
-                                "navigate"
-                            ) {
-
-                                return caches.match(
-                                    "./index.html"
-                                );
-
-                            }
-
-                        });
+                    return new Response(
+                        "Offline",
+                        {
+                            status: 503,
+                            statusText:
+                                "Offline"
+                        }
+                    );
 
                 })
 
