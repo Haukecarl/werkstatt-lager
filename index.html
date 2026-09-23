@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111827"
+    >
+
+    <meta
+        name="description"
+        content="Private Lagerverwaltung für Werkstatt und Material"
+    >
+
+
+    <!-- PWA -->
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+
+    <!-- iPhone / iOS -->
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Werkstatt Lager"
+    >
+
+
+    <title>
+        Werkstatt Lager
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="app-header">
+
+    <div>
+
+        <p class="eyebrow">
+            MEINE WERKSTATT
+        </p>
+
+        <h1>
+            Werkstatt Lager
+        </h1>
+
+    </div>
+
+
+    <button
+        id="addButton"
+        class="header-add-button"
+        type="button"
+        aria-label="Artikel hinzufügen"
+    >
+        +
+    </button>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- ========================================= -->
+    <!-- STARTSEITE -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="homePage"
+        class="page active"
+    >
+
+
+        <div class="welcome-card">
+
+            <p class="eyebrow light">
+                WERKSTATTVERWALTUNG
+            </p>
+
+            <h2>
+                Alles an seinem Platz.
+            </h2>
+
+            <p>
+                Material, Mindestbestände,
+                Lagerplätze und QR-Codes
+                an einem Ort.
+            </p>
+
+        </div>
+
+
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <span>
+                    Artikel
+                </span>
+
+                <strong id="articleCount">
+                    0
+                </strong>
+
+            </div>
+
+
+
+            <div class="stat-card warning">
+
+                <span>
+                    Nachkaufen
+                </span>
+
+                <strong id="lowStockCount">
+                    0
+                </strong>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <span>
+                    Lagerplätze
+                </span>
+
+                <strong id="locationCount">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="eyebrow">
+                    ACHTUNG
+                </p>
+
+                <h2>
+                    Niedrige Bestände
+                </h2>
+
+            </div>
+
+
+            <button
+                class="text-button"
+                data-page-target="shoppingPage"
+                type="button"
+            >
+                Alle
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="homeLowStockList"
+            class="card-list"
+        ></div>
+
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="eyebrow">
+                    SCHNELLZUGRIFF
+                </p>
+
+                <h2>
+                    Werkstatt
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="quick-grid">
+
+
+            <button
+                class="quick-card"
+                data-page-target="inventoryPage"
+                type="button"
+            >
+
+                <span class="quick-icon">
+                    📦
+                </span>
+
+                <span>
+
+                    <strong>
+                        Lager öffnen
+                    </strong>
+
+                    <small>
+                        Alle Materialien ansehen
+                    </small>
+
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="quick-card"
+                id="quickAddButton"
+                type="button"
+            >
+
+                <span class="quick-icon">
+                    ＋
+                </span>
+
+                <span>
+
+                    <strong>
+                        Material anlegen
+                    </strong>
+
+                    <small>
+                        Neuen Artikel erfassen
+                    </small>
+
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="quick-card"
+                data-page-target="shoppingPage"
+                type="button"
+            >
+
+                <span class="quick-icon">
+                    🛒
+                </span>
+
+                <span>
+
+                    <strong>
+                        Einkaufsliste
+                    </strong>
+
+                    <small>
+                        Mindestbestände prüfen
+                    </small>
+
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="quick-card"
+                id="homeScanButton"
+                type="button"
+            >
+
+                <span class="quick-icon">
+                    ▦
+                </span>
+
+                <span>
+
+                    <strong>
+                        QR scannen
+                    </strong>
+
+                    <small>
+                        Material oder Lagerplatz finden
+                    </small>
+
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="quick-card"
+                data-page-target="locationsPage"
+                type="button"
+            >
+
+                <span class="quick-icon">
+                    🗄️
+                </span>
+
+                <span>
+
+                    <strong>
+                        Lagerplätze
+                    </strong>
+
+                    <small>
+                        Regal, Ebene und Box ansehen
+                    </small>
+
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="quick-card"
+                data-page-target="settingsPage"
+                type="button"
+            >
+
+                <span class="quick-icon">
+                    ⚙️
+                </span>
+
+                <span>
+
+                    <strong>
+                        Daten & Backup
+                    </strong>
+
+                    <small>
+                        Lager sichern oder wiederherstellen
+                    </small>
+
+                </span>
+
+            </button>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- INVENTAR -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="inventoryPage"
+        class="page"
+    >
+
+
+        <div class="page-title">
+
+            <p class="eyebrow">
+                INVENTAR
+            </p>
+
+            <h2>
+                Lager
+            </h2>
+
+            <p>
+                Material suchen, Bestände ändern
+                und QR-Codes öffnen.
+            </p>
+
+        </div>
+
+
+
+        <div class="search-box">
+
+            <span>
+                ⌕
+            </span>
+
+            <input
+                id="searchInput"
+                type="search"
+                placeholder="Material, Kategorie oder Lagerplatz"
+            >
+
+        </div>
+
+
+
+        <div class="filter-row">
+
+            <button
+                class="filter-button active"
+                data-filter="all"
+                type="button"
+            >
+                Alle
+            </button>
+
+
+            <button
+                class="filter-button"
+                data-filter="low"
+                type="button"
+            >
+                Nachkaufen
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="inventoryList"
+            class="card-list"
+        ></div>
+
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- EINKAUF -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="shoppingPage"
+        class="page"
+    >
+
+
+        <div class="page-title">
+
+            <p class="eyebrow">
+                MINDESTBESTÄNDE
+            </p>
+
+            <h2>
+                Einkaufsliste
+            </h2>
+
+            <p>
+                Artikel erscheinen hier automatisch,
+                sobald die Mindestmenge erreicht
+                oder unterschritten wurde.
+            </p>
+
+        </div>
+
+
+
+        <div
+            id="shoppingList"
+            class="card-list"
+        ></div>
+
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- QR -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="qrPage"
+        class="page"
+    >
+
+
+        <div class="page-title">
+
+            <p class="eyebrow">
+                QR-SYSTEM
+            </p>
+
+            <h2>
+                QR-Codes
+            </h2>
+
+            <p>
+                Scanne Artikel oder Lagerplätze
+                mit der Kamera.
+            </p>
+
+        </div>
+
+
+
+        <button
+            id="qrScanButton"
+            class="scan-main-button"
+            type="button"
+        >
+
+            <span class="scan-main-icon">
+                ▦
+            </span>
+
+            <span>
+
+                <strong>
+                    QR-Code scannen
+                </strong>
+
+                <small>
+                    Kamera verwenden
+                </small>
+
+            </span>
+
+        </button>
+
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="eyebrow">
+                    LAGER
+                </p>
+
+                <h2>
+                    Lagerplatz-Codes
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            id="qrLocationList"
+            class="location-list"
+        ></div>
+
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- LAGERPLÄTZE -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="locationsPage"
+        class="page"
+    >
+
+
+        <div class="page-title">
+
+            <p class="eyebrow">
+                REGALSYSTEM
+            </p>
+
+            <h2>
+                Lagerplätze
+            </h2>
+
+            <p>
+                Alle verwendeten Plätze in deinem
+                Werkstattlager.
+            </p>
+
+        </div>
+
+
+
+        <div
+            id="locationList"
+            class="location-list"
+        ></div>
+
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- BACKUP -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="settingsPage"
+        class="page"
+    >
+
+
+        <div class="page-title">
+
+            <p class="eyebrow">
+                DATEN
+            </p>
+
+            <h2>
+                Backup & Verwaltung
+            </h2>
+
+            <p>
+                Sichere dein komplettes Lager regelmäßig,
+                besonders bevor du viele Artikel einträgst.
+            </p>
+
+        </div>
+
+
+
+        <div class="settings-card">
+
+            <div class="settings-icon">
+                💾
+            </div>
+
+            <div>
+
+                <h3>
+                    Backup erstellen
+                </h3>
+
+                <p>
+                    Exportiert deine Artikel,
+                    Bestände, Mindestmengen,
+                    Lagerplätze und Fotos.
+                </p>
+
+            </div>
+
+
+            <button
+                id="exportButton"
+                class="primary-button"
+                type="button"
+            >
+                Backup exportieren
+            </button>
+
+        </div>
+
+
+
+        <div class="settings-card">
+
+            <div class="settings-icon">
+                📥
+            </div>
+
+            <div>
+
+                <h3>
+                    Backup importieren
+                </h3>
+
+                <p>
+                    Stellt ein zuvor exportiertes
+                    Werkstatt-Lager-Backup wieder her.
+                </p>
+
+            </div>
+
+
+            <button
+                id="importButton"
+                class="secondary-wide-button"
+                type="button"
+            >
+                Backup auswählen
+            </button>
+
+
+            <input
+                id="importFileInput"
+                type="file"
+                accept=".json,application/json"
+                hidden
+            >
+
+        </div>
+
+
+
+        <div class="settings-card">
+
+            <div class="settings-icon">
+                📊
+            </div>
+
+            <div>
+
+                <h3>
+                    Aktueller Stand
+                </h3>
+
+                <p id="storageSummary">
+                    0 Artikel
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- ARTIKEL DETAIL -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="detailPage"
+        class="page"
+    >
+
+        <button
+            id="detailBackButton"
+            class="back-button"
+            type="button"
+        >
+            ← Zurück
+        </button>
+
+
+        <div id="detailContent"></div>
+
+    </section>
+
+
+
+    <!-- ========================================= -->
+    <!-- LAGERPLATZ DETAIL -->
+    <!-- ========================================= -->
+
+
+    <section
+        id="locationDetailPage"
+        class="page"
+    >
+
+        <button
+            id="locationBackButton"
+            class="back-button"
+            type="button"
+        >
+            ← Zurück
+        </button>
+
+
+        <div id="locationDetailContent"></div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ========================================= -->
+<!-- NAVIGATION -->
+<!-- ========================================= -->
+
+
+<nav class="bottom-nav">
+
+
+    <button
+        class="nav-button active"
+        data-page-target="homePage"
+        type="button"
+    >
+
+        <span>
+            ⌂
+        </span>
+
+        <small>
+            Start
+        </small>
+
+    </button>
+
+
+
+    <button
+        class="nav-button"
+        data-page-target="inventoryPage"
+        type="button"
+    >
+
+        <span>
+            ▤
+        </span>
+
+        <small>
+            Lager
+        </small>
+
+    </button>
+
+
+
+    <button
+        class="nav-button"
+        data-page-target="shoppingPage"
+        type="button"
+    >
+
+        <span>
+            🛒
+        </span>
+
+        <small>
+            Einkauf
+        </small>
+
+    </button>
+
+
+
+    <button
+        class="nav-button"
+        data-page-target="qrPage"
+        type="button"
+    >
+
+        <span>
+            ▦
+        </span>
+
+        <small>
+            QR
+        </small>
+
+    </button>
+
+
+</nav>
+
+
+
+<!-- ========================================= -->
+<!-- ARTIKEL MODAL -->
+<!-- ========================================= -->
+
+
+<div
+    id="itemModal"
+    class="modal hidden"
+>
+
+
+    <div
+        class="modal-backdrop"
+        data-close-item-modal
+    ></div>
+
+
+
+    <div class="modal-sheet">
+
+
+        <div class="modal-handle"></div>
+
+
+
+        <div class="modal-header">
+
+
+            <div>
+
+                <p class="eyebrow">
+                    MATERIAL
+                </p>
+
+                <h2 id="modalTitle">
+                    Artikel hinzufügen
+                </h2>
+
+            </div>
+
+
+
+            <button
+                class="close-button"
+                data-close-item-modal
+                type="button"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+
+        <form id="itemForm">
+
+
+            <input
+                id="itemId"
+                type="hidden"
+            >
+
+
+
+            <label>
+
+                Name
+
+                <input
+                    id="itemName"
+                    type="text"
+                    placeholder="z. B. Sechskantschraube M6×30"
+                    required
+                >
+
+            </label>
+
+
+
+            <label>
+
+                Kategorie
+
+                <input
+                    id="itemCategory"
+                    type="text"
+                    list="categorySuggestions"
+                    placeholder="z. B. Schrauben"
+                >
+
+                <datalist id="categorySuggestions"></datalist>
+
+            </label>
+
+
+
+            <div class="form-grid">
+
+
+                <label>
+
+                    Bestand
+
+                    <input
+                        id="itemQuantity"
+                        type="number"
+                        min="0"
+                        step="1"
+                        value="0"
+                        required
+                    >
+
+                </label>
+
+
+
+                <label>
+
+                    Mindestmenge
+
+                    <input
+                        id="itemMinimum"
+                        type="number"
+                        min="0"
+                        step="1"
+                        value="0"
+                        required
+                    >
+
+                </label>
+
+
+            </div>
+
+
+
+            <label>
+
+                Einheit
+
+                <select id="itemUnit">
+
+                    <option>Stück</option>
+                    <option>Packungen</option>
+                    <option>Meter</option>
+                    <option>Liter</option>
+                    <option>Kilogramm</option>
+                    <option>Gramm</option>
+                    <option>Paar</option>
+                    <option>Rollen</option>
+                    <option>Dosen</option>
+                    <option>Flaschen</option>
+
+                </select>
+
+            </label>
+
+
+
+            <div class="form-section">
+
+
+                <div class="form-section-title">
+
+
+                    <div>
+
+                        <p class="eyebrow">
+                            LAGERPLATZ
+                        </p>
+
+                        <h3>
+                            Regal auswählen
+                        </h3>
+
+                    </div>
+
+
+
+                    <span
+                        id="generatedLocation"
+                        class="generated-location"
+                    >
+                        —
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="location-form-grid">
+
+
+                    <label>
+
+                        Regal
+
+                        <input
+                            id="locationRack"
+                            type="text"
+                            placeholder="1"
+                        >
+
+                    </label>
+
+
+
+                    <label>
+
+                        Ebene
+
+                        <input
+                            id="locationLevel"
+                            type="text"
+                            placeholder="3"
+                        >
+
+                    </label>
+
+
+
+                    <label>
+
+                        Box
+
+                        <input
+                            id="locationBox"
+                            type="text"
+                            placeholder="04"
+                        >
+
+                    </label>
+
+
+                </div>
+
+
+
+                <label>
+
+                    Oder eigener Lagerplatz
+
+                    <input
+                        id="customLocation"
+                        type="text"
+                        placeholder="z. B. Werkbank-Schublade-2"
+                    >
+
+                </label>
+
+
+            </div>
+
+
+
+            <div class="form-section">
+
+
+                <p class="eyebrow">
+                    FOTO
+                </p>
+
+                <h3>
+                    Materialfoto
+                </h3>
+
+
+
+                <div
+                    id="photoPreview"
+                    class="photo-preview"
+                >
+
+                    <span>
+                        📷
+                    </span>
+
+                    <p>
+                        Noch kein Foto
+                    </p>
+
+                </div>
+
+
+
+                <label
+                    class="photo-button"
+                    for="itemPhoto"
+                >
+                    Foto aufnehmen / auswählen
+                </label>
+
+
+
+                <input
+                    id="itemPhoto"
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    hidden
+                >
+
+
+
+                <button
+                    id="removePhotoButton"
+                    class="remove-photo-button hidden"
+                    type="button"
+                >
+                    Foto entfernen
+                </button>
+
+
+            </div>
+
+
+
+            <label>
+
+                Notiz
+
+                <textarea
+                    id="itemNote"
+                    rows="3"
+                    placeholder="Optional"
+                ></textarea>
+
+            </label>
+
+
+
+            <button
+                class="primary-button"
+                type="submit"
+            >
+                Speichern
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ========================================= -->
+<!-- QR MODAL -->
+<!-- ========================================= -->
+
+
+<div
+    id="qrModal"
+    class="modal hidden"
+>
+
+
+    <div
+        class="modal-backdrop"
+        data-close-qr-modal
+    ></div>
+
+
+
+    <div class="qr-modal-box">
+
+
+        <button
+            class="close-button qr-close"
+            data-close-qr-modal
+            type="button"
+        >
+            ×
+        </button>
+
+
+
+        <p class="eyebrow">
+            QR-ETIKETT
+        </p>
+
+
+        <h2 id="qrModalTitle">
+            QR-Code
+        </h2>
+
+
+        <p
+            id="qrModalSubtitle"
+            class="qr-subtitle"
+        ></p>
+
+
+
+        <div
+            id="qrCodeContainer"
+            class="qr-code-container"
+        ></div>
+
+
+
+        <div
+            id="qrReadableCode"
+            class="qr-readable-code"
+        ></div>
+
+
+
+        <button
+            id="printQrButton"
+            class="primary-button"
+            type="button"
+        >
+            Etikett drucken
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ========================================= -->
+<!-- SCANNER -->
+<!-- ========================================= -->
+
+
+<div
+    id="scannerModal"
+    class="modal hidden"
+>
+
+
+    <div class="scanner-screen">
+
+
+        <div class="scanner-header">
+
+
+            <div>
+
+                <p class="eyebrow light">
+                    QR-SCANNER
+                </p>
+
+                <h2>
+                    Code scannen
+                </h2>
+
+            </div>
+
+
+
+            <button
+                id="closeScannerButton"
+                class="scanner-close"
+                type="button"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+
+        <div class="scanner-frame">
+
+            <div id="qrReader"></div>
+
+        </div>
+
+
+
+        <p class="scanner-help">
+            Halte den QR-Code mittig
+            vor die Kamera.
+        </p>
+
+
+        <p
+            id="scannerStatus"
+            class="scanner-status"
+        ></p>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ========================================= -->
+<!-- LÖSCHEN -->
+<!-- ========================================= -->
+
+
+<div
+    id="deleteModal"
+    class="modal hidden"
+>
+
+
+    <div
+        class="modal-backdrop"
+        data-close-delete-modal
+    ></div>
+
+
+
+    <div class="confirm-box">
+
+
+        <h2>
+            Artikel löschen?
+        </h2>
+
+
+        <p id="deleteText"></p>
+
+
+
+        <div class="confirm-actions">
+
+
+            <button
+                class="secondary-button"
+                data-close-delete-modal
+                type="button"
+            >
+                Abbrechen
+            </button>
+
+
+
+            <button
+                id="confirmDeleteButton"
+                class="danger-button"
+                type="button"
+            >
+                Löschen
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ========================================= -->
+<!-- QR-BIBLIOTHEKEN -->
+<!-- ========================================= -->
+
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+></script>
+
+
+<script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript"
+></script>
+
+
+
+<!-- ========================================= -->
+<!-- UNSERE APP -->
+<!-- ========================================= -->
+
+
+<script src="app.js"></script>
+
+
+
+<!-- ========================================= -->
+<!-- SERVICE WORKER -->
+<!-- ========================================= -->
+
+
+<script>
+
+    if ("serviceWorker" in navigator) {
+
+        window.addEventListener(
+            "load",
+            () => {
+
+                navigator
+                    .serviceWorker
+                    .register("./service-worker.js")
+                    .then(registration => {
+
+                        console.log(
+                            "Service Worker aktiv:",
+                            registration.scope
+                        );
+
+                    })
+                    .catch(error => {
+
+                        console.error(
+                            "Service Worker Fehler:",
+                            error
+                        );
+
+                    });
+
+            }
+        );
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
